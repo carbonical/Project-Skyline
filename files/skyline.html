@@ -809,7 +809,13 @@
             document.querySelector("#contributor-content").style.display = "block"
         }
         DisplayContributors()
-	window.onload = function() { // licensing function
+	
+    </script>
+	<script> // licensing 
+// licensing check on page load
+window.onload = async function () {
+    const AUTH_LIST_URL = "https://raw.githubusercontent.com/carbonical/Project-Skyline/main/auth-codes.json";
+    
     // Retrieve the authorization code and expiry date from localStorage
     const storedAuthCode = localStorage.getItem('project_skyline_auth_code');
     const storedExpiryDate = localStorage.getItem('project_skyline_auth_expiry');
@@ -826,13 +832,25 @@
             return;
         }
 
-        // Validate the authorization code (ensure it's the correct one)
-        if (storedAuthCode === "correct-auth-code") {
-            console.log("License is valid.");
-            // Continue loading the page content, proceed as usual
-        } else {
-            alert("Invalid authorization code.");
-            window.location.href = "https://your-invalid-license-page.com";  // Redirect to a page showing the error
+        // Fetch the list of valid authorization codes
+        try {
+            const response = await fetch(AUTH_LIST_URL);
+            const authData = await response.json();
+
+            // Validate if the stored code matches a valid one from the list
+            if (authData[storedAuthCode] && !authData[storedAuthCode].revoked) {
+                console.log("License is valid.");
+                // Continue loading the page content
+                return;  // Valid license, proceed with page content
+            } else {
+                alert("Invalid or revoked authorization code.");
+                window.location.href = "https://your-invalid-license-page.com";  // Redirect to an error page
+                return;
+            }
+        } catch (error) {
+            console.error("Error fetching auth data:", error);
+            alert("An error occurred while validating your license.");
+            window.location.href = "https://your-license-entry-page.com";  // Redirect to a page to enter the license code
             return;
         }
     } else {
@@ -841,7 +859,6 @@
         return;
     }
 };
-
-    </script>
+</script>
 </body>
 </html>
