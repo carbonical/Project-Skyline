@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Project Skyline Installer</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    input, button { margin: 10px; padding: 10px; font-size: 16px; }
+  </style>
+</head>
+<body>
+
+<h1>Project Skyline Installer</h1>
+
+<input type="text" id="authCode" placeholder="Enter your authorization code">
+<br>
+<button onclick="startInstall()">Install</button>
+
+<div id="status"></div>
+
+<script>
+// Settings specific to YOUR project
+const AUTH_LIST_URL = "https://raw.githubusercontent.com/carbonical/Project-Skyline/main/auth-codes.json";
+const FILES_BASE_URL = "https://raw.githubusercontent.com/carbonical/Project-Skyline/main/files/";
+
+async function startInstall() {
+  const code = document.getElementById('authCode').value.trim();
+  if (!code) {
+    setStatus("Please enter a code.");
+    return;
+  }
+
+  setStatus("Checking authorization...");
+
+  try {
+    const res = await fetch(AUTH_LIST_URL);
+    const authData = await res.json();
+
+    const entry = authData[code];
+    if (!entry) {
+      setStatus("Invalid code.");
+      return;
+    }
+
+    if (entry.revoked) {
+      setStatus("Authorization revoked.");
+      return;
+    }
+
+    const expiry = new Date(entry.expires);
+    const now = new Date();
+    if (now > expiry) {
+      setStatus("Authorization expired.");
+      return;
+    }
+
+    // Store in localStorage
+    localStorage.setItem('project_skyline_auth_code', code);
+    localStorage.setItem('project_skyline_auth_expiry', expiry.toISOString());
+
+    setStatus("Authorized! Downloading files...");
+
+    // Define your files
+    const filesToDownload = [
+      "index.html",
+      "app.js",
+      "styles.css"
+    ];
+
+    for (const file of filesToDownload) {
+      await downloadAndSave(file);
+    }
+
+    setStatus("Installation complete!");
+
+  } catch (err) {
+    console.error(err);
+    setStatus("Error during installation: " + err.message);
+  }
+}
+
+async function downloadAndSave(fileName) {
+  const url = FILES_BASE_URL + fileName;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch " + fileName);
+
+  const blob = await res.blob();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fileName;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function setStatus(message) {
+  document.getElementById('status').innerText = message;
+}
+</script>
+
+</body>
+</html>
 
