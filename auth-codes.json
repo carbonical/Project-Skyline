@@ -5,6 +5,6 @@
   },
   "DEF456": {
     "expires": "2025-06-15T00:00:00Z",
-    "revoked": false
+    "revoked": true
   }
 }
