@@ -809,6 +809,38 @@
             document.querySelector("#contributor-content").style.display = "block"
         }
         DisplayContributors()
+	    window.onload = function() {
+    const storedAuthCode = localStorage.getItem('authCode');
+    const storedExpiryDate = localStorage.getItem('expiryDate');
+    const currentDate = new Date();
+    
+    // Check if the auth code and expiry date exist
+    if (storedAuthCode && storedExpiryDate) {
+        const expiryDate = new Date(storedExpiryDate);
+
+        // Compare the expiry date with the current date
+        if (currentDate > expiryDate) {
+            alert("Your license has expired.");
+            window.location.href = "https://your-license-expired-page.com";  // Redirect to an expiration page or lock the content
+            return;
+        }
+
+        // Validate the authorization code (you may check it against a predefined value or a pattern)
+        if (storedAuthCode === "correct-auth-code") {
+            console.log("License is valid.");
+            // Continue loading the page content
+        } else {
+            alert("Invalid authorization code.");
+            window.location.href = "https://your-invalid-license-page.com";  // Redirect to a page showing the error
+            return;
+        }
+    } else {
+        alert("License information missing. Please enter a valid license code.");
+        window.location.href = "https://your-license-entry-page.com";  // Redirect to a page to enter the license code
+        return;
+    }
+};
+
     </script>
 </body>
 </html>
