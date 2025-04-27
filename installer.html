@@ -3,34 +3,186 @@
 <head>
   <meta charset="UTF-8">
   <title>Project Skyline Installer</title>
+
+  <!-- Import Inter font and Material Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
   <style>
-    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
-    input, button { margin: 10px; padding: 10px; font-size: 16px; }
+    :root {
+      --bg-color: #121212;
+      --surface-color: #1E1E1E;
+      --primary-color: #8ab4f8;
+      --text-color: #e0e0e0;
+      --border-radius: 12px;
+      --font-header: 'Inter', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --border-color: #333; /* Border color */
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: var(--font-body);
+      color: var(--text-color);
+    }
+
+    .card {
+      background: #121212;
+      padding: 48px 40px 40px;
+      border-radius: var(--border-radius);
+      width: 360px;
+      text-align: center; /* Center the text */
+      border: 2px solid var(--border-color); /* Added border */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-family: var(--font-header);
+      font-size: 24px;
+      margin-bottom: 24px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .input-container {
+      position: relative;
+      width: 100%;
+      margin-bottom: 32px;
+      font-family: var(--font-body);
+    }
+
+    .input-container input {
+      width: 100%;
+      padding: 16px 0 8px 0;
+      border: none;
+      border-bottom: 2px solid #5f6368;
+      background: transparent;
+      color: var(--text-color);
+      font-size: 16px;
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .input-container label {
+      position: absolute;
+      top: 16px;
+      left: 0;
+      font-size: 16px;
+      color: #9aa0a6;
+      pointer-events: none;
+      font-family: var(--font-body);
+      transition: all 0.2s ease;
+    }
+
+    .input-container input:focus ~ label,
+    .input-container input:not(:placeholder-shown) ~ label {
+      top: -8px;
+      font-size: 12px;
+      color: var(--primary-color);
+    }
+
+    .input-container input:focus {
+      border-bottom: 2px solid var(--primary-color);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #121212;
+      background: var(--primary-color);
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s;
+      letter-spacing: 0.5px;
+      font-family: var(--font-body);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    button:hover {
+      background: #669df6;
+      box-shadow: 0 0 8px #669df6;
+    }
+
+    .material-icons {
+      font-size: 20px;
+    }
+
+    #status {
+      margin-top: 24px;
+      font-size: 14px;
+      min-height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 12px;
+      color: #777;
+      font-family: var(--font-body);
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center the footer text */
+    }
+
+    .status-icon {
+      font-size: 22px;
+      margin-right: 8px;
+    }
   </style>
 </head>
+
 <body>
 
-<h1>Project Skyline Installer</h1>
+<div class="card">
+  <h1>Install Project Skyline</h1>
 
-<input type="text" id="authCode" placeholder="Enter your authorization code">
-<br>
-<button onclick="startInstall()">Install</button>
+  <div class="input-container">
+    <input id="authCode" type="text" placeholder=" " required>
+    <label for="authCode">Authorization Code</label>
+  </div>
 
-<div id="status"></div>
+  <button onclick="startInstall()">
+    <span class="material-icons">cloud_download</span> Install
+  </button>
+
+  <div id="status"></div>
+
+  <div class="footer">Powered by Project Skyline</div>
+</div>
 
 <script>
-// Settings specific to YOUR project
+// Installer script
 const AUTH_LIST_URL = "https://raw.githubusercontent.com/carbonical/Project-Skyline/main/auth-codes.json";
-const FILES_BASE_URL = "https://raw.githubusercontent.com/carbonical/Project-Skyline/main/files/";
+const INDEX_FILE_URL = "https://raw.githubusercontent.com/carbonical/Project-Skyline/main/files/skyline.html";
 
 async function startInstall() {
   const code = document.getElementById('authCode').value.trim();
   if (!code) {
-    setStatus("Please enter a code.");
+    setStatus("Please enter a code.", "error");
     return;
   }
 
-  setStatus("Checking authorization...");
+  setStatus("Checking authorization...", "info");
 
   try {
     const res = await fetch(AUTH_LIST_URL);
@@ -38,65 +190,77 @@ async function startInstall() {
 
     const entry = authData[code];
     if (!entry) {
-      setStatus("Invalid code.");
+      setStatus("Invalid code.", "error");
       return;
     }
 
     if (entry.revoked) {
-      setStatus("Authorization revoked.");
+      setStatus("Authorization revoked.", "error");
       return;
     }
 
     const expiry = new Date(entry.expires);
     const now = new Date();
     if (now > expiry) {
-      setStatus("Authorization expired.");
+      setStatus("Authorization expired.", "error");
       return;
     }
 
-    // Store in localStorage
     localStorage.setItem('project_skyline_auth_code', code);
     localStorage.setItem('project_skyline_auth_expiry', expiry.toISOString());
 
-    setStatus("Authorized! Downloading files...");
+    setStatus("Authorized! Downloading...", "info");
 
-    // Define your files
-    const filesToDownload = [
-      "index.html",
-      "app.js",
-      "styles.css"
-    ];
+    await downloadIndex();
 
-    for (const file of filesToDownload) {
-      await downloadAndSave(file);
-    }
-
-    setStatus("Installation complete!");
+    setStatus("Installation complete! Open 'skyline.html'", "success");
 
   } catch (err) {
     console.error(err);
-    setStatus("Error during installation: " + err.message);
+    setStatus("Error during installation: " + err.message, "error");
   }
 }
 
-async function downloadAndSave(fileName) {
-  const url = FILES_BASE_URL + fileName;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Failed to fetch " + fileName);
+async function downloadIndex() {
+  const res = await fetch(INDEX_FILE_URL + '?v=' + Date.now());
+  if (!res.ok) throw new Error("Failed to fetch index.html");
 
   const blob = await res.blob();
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = fileName;
+  a.download = "skyline.html";
   a.click();
   URL.revokeObjectURL(a.href);
 }
 
-function setStatus(message) {
-  document.getElementById('status').innerText = message;
+function setStatus(message, type) {
+  const statusElement = document.getElementById('status');
+  const iconElement = document.createElement('span');
+  iconElement.classList.add('material-icons', 'status-icon');
+
+  switch(type) {
+    case "error":
+      iconElement.innerText = "error";
+      statusElement.style.color = "#ff5f5f";
+      break;
+    case "info":
+      iconElement.innerText = "info";
+      statusElement.style.color = "#8ab4f8";
+      break;
+    case "success":
+      iconElement.innerText = "check_circle";
+      statusElement.style.color = "#66bb6a";
+      break;
+    default:
+      iconElement.innerText = "info";
+      statusElement.style.color = "#e0e0e0";
+  }
+
+  statusElement.innerHTML = ''; // Clear any previous content
+  statusElement.appendChild(iconElement);
+  statusElement.appendChild(document.createTextNode(message));
 }
 </script>
 
 </body>
 </html>
-
