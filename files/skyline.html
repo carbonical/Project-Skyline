@@ -16,6 +16,8 @@
     <meta property="twitter:card" content="summary_large_image">
     <link rel="shortcut icon" type="image/png" href=""> <!-- placeholder -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+
 
     <style>
     	@import url('"https://fonts.googleapis.com/css2?family=Roboto:ital,wght:@400;&display=swap');
@@ -24,7 +26,7 @@
 	}
 
     	body {
-            background-color: #1e1f22;
+            background-color: #0d141c;
             color: white;
             display: flex;
 	    font-family: "Inter", arial;
@@ -38,12 +40,12 @@
             width: 250px;
 	    font-family: "Inter", arial;
             height: 100vh;
-            background-color: #292a2d;
+            background-color: #0d141c;
             color: white;
             display: flex;
             flex-direction: column;
             padding: 20px;
-            border-right: 1px solid #444;
+            border-right: 1px solid #1f2e40;
         }
 
         .side-panel img {
@@ -62,7 +64,7 @@
     	.side-panel .option {
 	    position: relative;
 	    overflow: hidden;
-    	    margin: 10px 0;
+    	    margin: 5px 0;
             font-size: 18px;
             cursor: pointer;
             user-select: none;
@@ -115,12 +117,11 @@
             gap: 10px;
             padding: 10px;
             border-radius: 10px;
+            border: 1px solid #1f2e40;
 	    font-family: "Inter", arial;
             width: 375px;
             height: 140px;
             position: relative;
-            background: #292a2d;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     	}
 
     	.extension-info {
@@ -228,9 +229,9 @@
     	    left: 0;
     	    right: 0;
     	    bottom: 0;
-    	    background-color: #444746;
+    	    background-color: #1f2e40;
     	    border-radius: 15px;
-    	    border: 1.5px solid #8e918f;
+    	    border: 1.5px solid #1f2e40;
     	    transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out;
 	}
 
@@ -242,13 +243,13 @@
     	    left: 4px;
     	    top: 50%;
     	    transform: translateY(-50%);
-    	    background-color: #8e918f;
+    	    background-color: #699ddb;
     	    border-radius: 50%;
     	    transition: transform 0.1s ease-in-out, background-color 0.1s ease-in-out;
 	}
 
 	.switch:hover .slider:before {
-    	    box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+    	    box-shadow: 0 0 6px rgba(105, 157, 219, 0.5);
 	}
 
 	input:checked + .slider {
@@ -272,8 +273,8 @@
 	    width: 200px;
     	    height: 8px;
     	    appearance: none;
-    	    background: #444746;
-    	    border: 1.5px solid #8e918f;
+    	    background: #1f2e40;
+    	    border: 1.5px solid #1f2e40;
     	    border-radius: 15px;
     	    outline: none;
     	    transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out;
@@ -283,7 +284,7 @@
     	    appearance: none;
     	    width: 20px;
     	    height: 20px;
-    	    background: #8e918f;
+    	    background: #699ddb;
     	    border-radius: 50%;
     	    cursor: pointer;
     	    transition: transform 0.1s ease-in-out, background-color 0.1s ease-in-out;
@@ -306,41 +307,94 @@
             border-radius: 100%;
             border:solid #444 2px;
     	}
+
+  .top-bar {
+  position: fixed;
+  top: 0;
+  left: 290px; /* matches sidebar width */
+  right: 0;
+  height: 60px;
+  font-weight: bold;
+  background: #0d141c;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  border-bottom: 1px solid #1f2e40;
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+  .main-content {
+    padding-top: 80px; /* below top bar */
+      flex-grow: 1;
+  padding: 20px;
+  padding-top: 80px; /* extra space for top bar */
+  }
+
+  #license-timer {
+    font-size: 13px;
+    margin-top: 20px;
+    color: #c4c7c5;
+    user-select: none;
+  }
+        .title-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.beta-badge {
+  display: inline-block;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  margin-left: 10px;
+  border-radius: 20px;
+  background-color: #13202e;
+  color: #FFFFFF;
+  letter-spacing: 0.5px;
+  user-select: none;
+  position: relative;
+  top: -9px; /* Move up by 4px (adjust as needed) */
+}
+
+
     
     </style>
 </head>
 <body>
+<div class="top-bar" style="font-weight=bold;">All Extensions</div>
     <div class="side-panel">
     	<div style="display: flex; align-items: center;">
-            <img src="https://raw.githubusercontent.com/Blobby-Boi/ExtPrint3r/refs/heads/main/icon.png" width="50px" height="50px" style="margin-right: 10px;">
             <h2>Skyline</h2>
+            <span class="beta-badge">BETA</span>
     	</div>
         <div class="option" data-name="printer-tab">The Exploit</div>
         <div class="option" data-name="settings-tab">Settings</div>
         <div class="option" data-name="about-tab">About</div>
-        <div style="border-top: 1px solid #444; margin-top: 10px; padding-top: 10px; width: 100%;"></div>
-        <p style="text-align: center; margin-left: -10px; user-select: none;">Made by <a href="https://github.com/carbonical/" target="_blank">carbonical</a></p>
+        <div style="border-top: 1px solid #1f2e40; margin-top: 10px; margin-bottom: -10px; width: 100%;"></div>
+        <div id="license-timer">License: calculating...</div>
+        <div style="border-top: 1px solid #1f2e40; margin-top: 10px; padding-top: 10px; width: 100%;"></div>
     </div>
     <div class="main-content">
         <div id="printer-tab">
-            <h3 style="user-select: none; font-weight: 400;">All Extensions</h3>
             <div id="div-container"></div>
 	</div>
 	<div id="about-tab" style="display: none;">
-       	    <h2 style="user-select: none;">About Skyline</h2>
             <p style="user-select: none; line-height: 1.5;"><b>Skyline</b> is an exploit.</p>
-            <div style="border-top: 1px solid #444; margin-bottom: 10px; margin-top: 20px; padding-top: 10px; width: 100%;"></div>
+            <div style="border-top: 1px solid #1f2e40; margin-bottom: 10px; margin-top: 20px; padding-top: 10px; width: 100%;"></div>
             <div id="contributor-content" style="display:none;">
                 <h3 style="margin-left: 5px">Contributors</h3>
                 <div id="contributor-list"></div>
             </div>
     </div>
    	<div id="settings-tab" style="display: none;">
-            <h2 style="user-select: none;">Settings</h2>
 	    <label for="show-all-extensions" style="pointer-events: none;">Show All Extensions</label><input id="show-all-extensions" type="checkbox">
             <br>
             <label for="iframe-count">Amount of iframes</label><input type="range" min="100" max="10000" value="2500" step="100" id="iframe-count"><span id="iframe-count-display">2500</span>
-            <div style="border-top: 1px solid #444; margin-bottom: 10px; margin-top: 20px; padding-top: 10px; width: 100%;"></div>
+            <div style="border-top: 1px solid #1f2e40; margin-bottom: 10px; margin-top: 20px; padding-top: 10px; width: 100%;"></div>
             <label for="developer-mode" style="pointer-events: none;">Developer Mode</label><input id="developer-mode" type="checkbox"><br>
             <div id="dev-settings" style="display: none;">
                 <button style="min-width:240px;" id="add-ext">Temporarily Add Extension To List</button>
@@ -576,7 +630,7 @@
     	    }
 
     	    if (!hasSupportedExtensions) {
-                extContainer.innerHTML = "<p style='margin-left: 15px; font-size: 12px;'>No supported extensions installed :(</p>";
+                extContainer.innerHTML = "<p style='margin-left: 15px; font-size: 12px;'>You have no supported extensions installed. To bypass this, go to Settings > Show all extensions and set it to enabled.</p>";
     	    }
 	}
 	
@@ -587,7 +641,7 @@
 	    
 	function createIframesAndPrint(extPage, extIcon) {
     	    let printerWindow = window.open("", "_blank");
-    	    printerWindow.document.title = 'T‍h‍e‍ ‍P‍r‍i‍n‍t‍3‍r';
+    	    printerWindow.document.title = 'Skyline';
     	    printerWindow.document.body.style.backgroundColor = '#1e1f22';
 
     	    let icon = printerWindow.document.createElement('link');
@@ -673,7 +727,7 @@
             overlay.style.alignItems = "center";
 
             const popup = document.createElement("div");
-            popup.style.background = "#292a2d";
+            popup.style.background = "#0d141c";
             popup.style.color = "white";
             popup.style.width = "500px";
             popup.style.borderRadius = "10px";
@@ -685,9 +739,9 @@
             header.style.display = "flex";
             header.style.alignItems = "center";
             header.style.justifyContent = "space-between";
-            header.style.background = "#1e1f22";
+            header.style.background = "#0d141c";
             header.style.padding = "10px";
-            header.style.borderBottom = "1px solid #444";
+            header.style.borderBottom = "1px solid #1f2e40";
 
             const icon = document.createElement("img");
             icon.src = extIcon || "https://raw.githubusercontent.com/Blobby-Boi/ExtPrint3r/refs/heads/main/extension.png";
@@ -828,7 +882,7 @@
          // Compare the expiry date with the current date
          if (currentDate > expiryDate) {
             alert("Your license has expired.");
-            window.location.href = "https://your-license-expired-page.com"; // Redirect to an expiration page or show an error message
+            window.location.href = "https://www.youtube.com/watch?v=xvFZjo5PgG0"; // Redirect to an expiration page or show an error message
             return;
          }
 
@@ -844,21 +898,83 @@
                return; // Valid license, proceed with page content
             } else {
                alert("Invalid or revoked authorization code.");
-               window.location.href = "https://your-invalid-license-page.com"; // Redirect to an error page
+               window.location.href = "https://www.youtube.com/watch?v=xvFZjo5PgG0"; // Redirect to an error page
                return;
             }
          } catch (error) {
             console.error("Error fetching auth data:", error);
             alert("An error occurred while validating your license.");
-            window.location.href = "https://your-license-entry-page.com"; // Redirect to a page to enter the license code
+            window.location.href = "https://www.youtube.com/watch?v=xvFZjo5PgG0"; // Redirect to a page to enter the license code
             return;
          }
       } else {
-         alert("License information missing. Please enter a valid license code.");
-         window.location.href = "https://your-license-entry-page.com"; // Redirect to a page to enter the license code
+         alert("License information missing. Please enter a valid authorisation code.");
+         window.location.href = "https://www.youtube.com/watch?v=xvFZjo5PgG0"; // Redirect to a page to enter the license code
          return;
       }
    };
+
+// License countdown
+function updateLicenseTimer() {
+  const expiryStr = localStorage.getItem("project_skyline_auth_expiry");
+  const timerEl = document.getElementById("license-timer");
+
+  if (!expiryStr) {
+    timerEl.textContent = "License: unavailable";
+    return;
+  }
+
+  const expiryDate = new Date(expiryStr);
+  const now = new Date();
+  const diff = expiryDate - now;
+
+  if (diff <= 0) {
+    timerEl.textContent = "License expired";
+    return;
+  }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  timerEl.textContent = `License expires in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+// Update every second
+setInterval(updateLicenseTimer, 1000);
+updateLicenseTimer();
+
+      document.addEventListener("DOMContentLoaded", function () {
+    const topBar = document.querySelector('.top-bar'); // Reference to the top bar
+    document.querySelector("div.option").classList.add("selected");
+
+    optionButtons.forEach((button) => {
+        let dataName = button.getAttribute("data-name");
+        let thisButton = button;
+        button.addEventListener("click", () => {
+            HideAll();
+            document.getElementById(dataName).style.display = "block";
+            thisButton.classList.add("selected");
+
+            // Update the top bar title based on the selected option
+            switch (dataName) {
+                case "printer-tab":
+                    topBar.textContent = "All Extensions";
+                    break;
+                case "settings-tab":
+                    topBar.textContent = "Settings";
+                    break;
+                case "about-tab":
+                    topBar.textContent = "About";
+                    break;
+                default:
+                    topBar.textContent = "Skyline"; // Default title
+            }
+        });
+    });
+});
+
   </script>
 </body>
 </html>
