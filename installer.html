@@ -107,6 +107,7 @@
       border: none;
       border-radius: var(--border-radius);
       cursor: pointer;
+      margin-bottom: 14px;
       transition: background 0.3s, box-shadow 0.3s;
       letter-spacing: 0.5px;
       font-family: var(--font-body);
@@ -163,6 +164,10 @@
 
   <button onclick="startInstall()">
     <span class="material-icons">cloud_download</span> Install
+  </button>
+    
+  <button onclick="clearLocalData()">
+    <span class="material-icons">delete</span> Delete local data
   </button>
 
   <div id="status"></div>
@@ -260,6 +265,21 @@ function setStatus(message, type) {
   statusElement.appendChild(iconElement);
   statusElement.appendChild(document.createTextNode(message));
 }
+    
+function clearLocalData() {
+  const confirmation = prompt(
+    "⚠ This will require you to sign in with an authorization code again to continue using Skyline.\n\nType 'continue' to proceed or 'cancel' to abort."
+  );
+
+  if (confirmation && confirmation.toLowerCase() === 'continue') {
+    localStorage.removeItem('project_skyline_auth_code');
+    localStorage.removeItem('project_skyline_auth_expiry');
+    setStatus("Local data deleted.", "success");
+  } else {
+    setStatus("Deletion cancelled.", "info");
+  }
+}
+
 </script>
 
 </body>
